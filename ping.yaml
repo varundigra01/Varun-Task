@@ -1,0 +1,25 @@
+---
+- name: Run long-lived ping process
+  hosts: server
+  gather_facts: false
+  tasks:
+    - name: Start ping process in the background
+      shell: "nohup ping google.com >/dev/null 2>&1 & echo $!"
+      async: 0
+      poll: 0
+      register: ping_pid
+
+    - name: Wait a few seconds to allow the process to start
+      pause:
+        seconds: 5
+
+    - name: Verify if the ping process is running
+      shell: ps -ef | grep '[p]ing google.com'
+      changed_when: false
+      failed_when: false
+      register: ping_check
+
+    - name: Display running ping process
+      debug:
+        var: ping_check.stdout_lines
+
