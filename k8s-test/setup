@@ -1,0 +1,3 @@
+Using Docker Desktop for the Kubernetes
+#Below command for creating the namspace
+kubectl create namespace k8s-testing
